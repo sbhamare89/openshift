@@ -1,0 +1,58 @@
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+  System information as of Mon Jun 28 04:59:49 UTC 2021
+  System load:  0.22              Processes:           200
+  Usage of /:   1.7% of 96.75GB   Users logged in:     0
+  Memory usage: 0%                IP address for ens4: 10.128.0.2
+  Swap usage:   0%
+0 updates can be applied immediately.
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+
+
+
+{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNTY5NDg1YjM2MGQ3NDJjZGJkNjU0MDRkODg3ODc2N2U6U0E5RzlPREU5TkNFSU5KUlY2RU9SN0tRM0NRWElCUU1PTFFESlNESVMzQVBCN1FJRFRRTUVNU0M0VTNCU0owRA==","email":"mr.sagarbhamare@gmail.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNTY5NDg1YjM2MGQ3NDJjZGJkNjU0MDRkODg3ODc2N2U6U0E5RzlPREU5TkNFSU5KUlY2RU9SN0tRM0NRWElCUU1PTFFESlNESVMzQVBCN1FJRFRRTUVNU0M0VTNCU0owRA==","email":"mr.sagarbhamare@gmail.com"},"registry.connect.redhat.com":{"auth":"fHVoYy1wb29sLTI1ZGZiNTc2LTM1ZjgtNGFkNC1iYzEzLTBjZjZhYjA1OGNjYzpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmhZVEl5WWprelptWTVNbUUwTldZM1ltRTFORFkzWkRGaE5XUTVZMlJsTWlKOS5zSTZBM1QweE1Ta2VJODBjb01NRWRpUEloNUFYOWVIZmotNFNxZFAxclk0YnBzdkVpZlU1QUR0QTJSbjdtNnJwQmZqaVNoQVpTRnRnOWhHTWFJY2FXYVhPa0NVZEJuMmxFWDhialNwMlRHOEN4aE0xOENxb2RTYTVBTXZVZTJ2Z1ZlWmdVa0g1ZWhSTnFqTDhEMW9ESjZNVXROM0twdXFobzQtZXhUaTdTWWpUR1hZRTViN0NVcndzZmZraTJCemt1Y1VDbVhMNHJIUlVtLWZFWExZQnNoeVM3TnVyWVAtanVTeVBLY05zUzNzSndrZzdBZHpRcDV1MkliSkpiUHA5Q3A5eVJDcjRmWjBVTjV3QzNTXzlQUVZNTmRRQXEzWV9ZRXB4Sk1tS01MQldfa1RFWFFVWWd5dWZlSGRIR3p5VUlUVWx6LUF1QU5JR0s0UzZuYnJCVlpnX3ZQLW1wdEVQNlExZWs2QUxiMno5RkFSNkM1Y0lsbjBxMXR4cUNWLVdfSno1b29md08ySWhqYlFMckJob0x3dnphUjRUSXVjOFJ5ZGtJc1NWVGp0THptOF9WdlVpSUN2QTBha1hsc0txWjBtSDZpbEdYUWVqb1A1MnZFT21jZnlFS0h0TzBkeFdod2NpVDl2N29XRzdEUjA5czJKXzgtcHJRaTREQmkydW9xa1pMX2hKeXljczdiVVU0Sm4xMTh5bjk4NV9EV0NQaWFBS1BnRVl1VkcwMDc2dHlXbWE4bWtTWU1QblMwMi1TekFZelBrVTFJVG5kcnJXVnZSbURjS2hBbDVGWTNIMjRWRWVCX3hLdEFMRVcyTzVSWDU2UUJQSXU4SV96cnl1RDk2ak8wcFN3bVc4SjN3dzJMN1hpcGFhNnVDZ3BNdEFyMWNZR2lVZ1JHaw==","email":"mr.sagarbhamare@gmail.com"},"registry.redhat.io":{"auth":"fHVoYy1wb29sLTI1ZGZiNTc2LTM1ZjgtNGFkNC1iYzEzLTBjZjZhYjA1OGNjYzpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmhZVEl5WWprelptWTVNbUUwTldZM1ltRTFORFkzWkRGaE5XUTVZMlJsTWlKOS5zSTZBM1QweE1Ta2VJODBjb01NRWRpUEloNUFYOWVIZmotNFNxZFAxclk0YnBzdkVpZlU1QUR0QTJSbjdtNnJwQmZqaVNoQVpTRnRnOWhHTWFJY2FXYVhPa0NVZEJuMmxFWDhialNwMlRHOEN4aE0xOENxb2RTYTVBTXZVZTJ2Z1ZlWmdVa0g1ZWhSTnFqTDhEMW9ESjZNVXROM0twdXFobzQtZXhUaTdTWWpUR1hZRTViN0NVcndzZmZraTJCemt1Y1VDbVhMNHJIUlVtLWZFWExZQnNoeVM3TnVyWVAtanVTeVBLY05zUzNzSndrZzdBZHpRcDV1MkliSkpiUHA5Q3A5eVJDcjRmWjBVTjV3QzNTXzlQUVZNTmRRQXEzWV9ZRXB4Sk1tS01MQldfa1RFWFFVWWd5dWZlSGRIR3p5VUlUVWx6LUF1QU5JR0s0UzZuYnJCVlpnX3ZQLW1wdEVQNlExZWs2QUxiMno5RkFSNkM1Y0lsbjBxMXR4cUNWLVdfSno1b29md08ySWhqYlFMckJob0x3dnphUjRUSXVjOFJ5ZGtJc1NWVGp0THptOF9WdlVpSUN2QTBha1hsc0txWjBtSDZpbEdYUWVqb1A1MnZFT21jZnlFS0h0TzBkeFdod2NpVDl2N29XRzdEUjA5czJKXzgtcHJRaTREQmkydW9xa1pMX2hKeXljczdiVVU0Sm4xMTh5bjk4NV9EV0NQaWFBS1BnRVl1VkcwMDc2dHlXbWE4bWtTWU1QblMwMi1TekFZelBrVTFJVG5kcnJXVnZSbURjS2hBbDVGWTNIMjRWRWVCX3hLdEFM
+
+
+https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.10.0/crc-linux-amd64.tar.xz
+
+curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.9.0/crc-linux-amd64.tar.xz && tar -Jxvf crc-linux-amd64.tar.xz && mkdir -p ~/bin && export PATH=$PATH:~/bin && mv crc-linux*/crc ~/bin/ && rm -rf crc*
+
+curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.10.0/crc-linux-amd64.tar.xz && tar -Jxvf crc-linux-amd64.tar.xz && mkdir -p ~/bin && export PATH=$PATH:~/bin && mv crc-linux*/crc ~/bin/ && rm -rf crc*
+
+
+
+
+
+gcloud compute images list
+
+gcloud compute disks create crc-cent-disk --image-project centos-cloud --image-family centos-7 --zone us-central1-a
+
+gcloud compute images create gcp-nested-vm-image --source-image=centos-7-v20210701 --source-image-project=centos-cloud --licenses="https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx"
+
+
+
+Log in as administrator:
+  Username: kubeadmin
+  Password: A7g2L-wDIbZ-XFfCK-R7z4A
+
+Log in as user:
+  Username: developer
+  Password: developer
+
+Use the 'oc' command line interface:
+  $ eval $(crc oc-env)
+  $ oc login -u developer https://api.crc.testing:6443
+
+
+
+[forlinuxdata@crc-vm ~]$ crc ip
+192.168.130.11
+[forlinuxdata@crc-vm ~]$ hostname --ip-address
+10.128.0.11
