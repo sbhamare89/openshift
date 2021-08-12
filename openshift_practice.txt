@@ -1,29 +1,65 @@
-alias admin="oc login -u admin -p admin"
-alias developer="oc login -u developer -p developer"
-export KUBECONFIG="/opt/kubeconfig"
+alias admin="oc login -u admin -p redhat"
+alias developer="oc login -u developer -p redhat"
+export KUBECONFIG="/home/forlinuxdata/.crc/cache/crc_libvirt_4.7.13/kubeconfig"
 
-oc --kubeconfig=/opt/kubeconfig get nodes 
-
+oc --kubeconfig=/home/forlinuxdata/.crc/cache/crc_libvirt_4.7.13/kubeconfig get nodes
 
 yum install httpd-tools -y
 
-htpasswd -c -B -b /var/tmp/creds admin redhat
-htpasswd -b /var/tmp/creds developer redhat
-htpasswd -b /var/tmp/creds student1 redhat
-htpasswd -b /var/tmp/creds student2 redhat
-htpasswd -b /var/tmp/creds student3 redhat
+htpasswd -c -B -b /var/tmp/do280-creds admin redhat
+htpasswd -b /var/tmp/do280-creds developer redhat
+htpasswd -b /var/tmp/do280-creds student1 redhat
+htpasswd -b /var/tmp/do280-creds student2 redhat
+htpasswd -b /var/tmp/do280-creds student3 redhat
+
+oc get nodes
+oc describe nodes
+oc get events
+oc get clusterversion
+
+for delete user :
+htpasswd -D /var/tmp/do280-creds student3
+
+oc get oauth cluster -o yaml > oauth.yaml
+oc get secret -n openshift-config
+oc create secret generic do280-htpasswd --from-file=htpasswd=/var/tmp/do280-creds -n openshift-config --dry-run=client -o yaml
+vi oauth.yaml
+        spec:
+        identityProviders:
+        - htpasswd:
+        fileData:
+                name: do280-htpasswd
+        mappingMethod: claim
+        name: my_htpasswd_provider
+        type: HTPasswd
+oc replace -f oauth.yaml
+
+watch oc get pods -n openshift-authentication
+
+#to get data from existing secrete 
+oc extract secret/xlr8-htpass-secret -n openshift-config --to=/var/tmp/
+#now to update existing auth from updated secrete
+oc create secret generic -n openshift-config xlr8-htpass-secret --from-file=htpasswd=/var/tmp/htpasswd -o yaml --dry-run=client | oc replace -n openshift-config -f -
+oc delete user user1
+oc delete identity my_htpasswd_provider:user1
+oc adm groups new users user1
+oc adm groups add-users users user2 user3
 
 
-        $ cat /var/tmp/creds 
-        admin:$2y$05$q/n192jIMg8g5o6cT/raU.7HtVIJtK3tCx/hxm4hfmcwCVDlWGyCm
-        developer:$apr1$f8OzeLot$/aVGEhN1wzcLAYoU339H80
-        student1:$apr1$0pcLR44Z$MdYtKz6CVfHg6..JZsLuz/
-        student2:$apr1$qRuFfnKh$NwMSNLc4Su9siyaS4BROa/
-        student3:$apr1$h0H5iCCQ$u.qs0mnGtquHNsr.2S9vy1
+#create new project
+oc new-project project1
 
-
-oc create secret generic htpasswd-secret --from-file htpasswd=/var/tmp/creds -n openshift-config
-oc create secret generic htpasswd-secret --from-file htpasswd=/var/tmp/creds --dry-run=client -o yaml | oc replace -n openshift-config -f -
-oc get pods -n openshift-authentication
+oc get clusterrolebinding | grep -i self-provisioners
+oc adm policy remove-cluster-role-from-group self-provisioners system:authenticated:oauth
+oc adm groups new users_2 user2
+oc adm groups new users_3 user3
+oc adm policy add-role-to-group view users_2
+oc adm policy add-role-to-group edit users_3
+oc login -u user3
+oc new-app --name httpd httpd:2.4
+oc login -u user2
+oc new-app --name httpd httpd:2.4
+oc scale deployment.apps/httpd --replicas 3
+oc adm policy add-cluster-role-to-group --rolebinding-name self-provisioners self-provisioner system:authenticated:oauth
 
 

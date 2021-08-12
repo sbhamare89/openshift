@@ -1,0 +1,27 @@
+Q.1 htpass and create users using secret - tips mug up the syntax or refer docs by default nothing is configured 
+=> what is mean by nothing is configured,
+do they provide us kubeconfig file path or kubeadmin credentials
+Q.2 assign cluster role to users
+Q.3 assign project roles to users
+Q.4 create group and add users to group. Assign roles to group on project
+Q.5 Create Quota
+=> can we use help.html / reference documentation provided on screen ?
+Q.6 Create LimitRange
+Q.7 Manually scale the pods
+=> scale pod or DC ?
+Q.8 Autoscaling of pods and define limits/requests in config
+=> can we edit existing DC settings ?
+Q.9 secure route using certificate
+=> provided certificate and key ?
+Q.10 Create secret
+Q.11 Use the created secret in existing application.
+=> need specific idea about it
+Q.12 Create service account
+Q.13 Use that service account in application and ensure application is accessible. 
+=> just provide access to service account to application ?
+Q.14 Deploy the application - Nodes tainted - tips error in oc get events shows no nodes avaialable 
+=> do we need to make them available in cluster ?
+Q.15 Deploy the application - Nodes selector - tips error in oc get events shows no nodes matching selector
+=> do we need to tag cluster nodes ?
+Q.16 Deploy the application - Pods throwing error insufficient memory - oc get events shows insufficient memory
+=> so pod restart work or shall edit it limit's or quota
