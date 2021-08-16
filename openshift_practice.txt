@@ -244,9 +244,15 @@ oc get hpa/loadtest
 oc login -u admin -p redhat
 oc create quota review-quota --hard=cpu=1,memory=2G,pods=20
 
-
-
+#machineset
+oc label node node1.us-west-1.compute.internal env=prod
+oc label --overwrite node node1.us-west-1.compute.internal env-
+oc get nodes -l node-role.kubernetes.io/worker -L env
+oc adm new-project scale-manual --node-selector env=prod
+oc adm policy add-role-to-user edit developer -n scale-manual
 
 
 
 oc new-app https://github.com/sclorg/cakephp-ex
+
+
