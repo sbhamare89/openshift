@@ -56,3 +56,6 @@ Use the 'oc' command line interface:
 192.168.130.11
 [forlinuxdata@crc-vm ~]$ hostname --ip-address
 10.128.0.11
+
+
+

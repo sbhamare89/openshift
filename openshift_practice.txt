@@ -13,6 +13,8 @@ htpasswd -b /var/tmp/do280-creds student2 redhat
 htpasswd -b /var/tmp/do280-creds student3 redhat
 
 oc get nodes
+# for taint nodes
+oc edit nodes
 oc describe nodes
 oc get events
 oc get clusterversion
@@ -62,4 +64,189 @@ oc new-app --name httpd httpd:2.4
 oc scale deployment.apps/httpd --replicas 3
 oc adm policy add-cluster-role-to-group --rolebinding-name self-provisioners self-provisioner system:authenticated:oauth
 
+#Secret handling
+oc create secret generic mysql --from-literal user=myuser --from-literal password=redhat123 --from-literal database=test_secrets --from-literal hostname=mysql
+oc new-app --docker-image=registry.access.redhat.com/rhscl/mysql-57-rhel7:5.7-47 --name=mysql
+oc set env --from=secret/mysql --prefix MYSQL_ deployment.apps/mysql
+oc rsh mysql-d6cbdffb5-lxgqt
+mysql -u myuser --password=redhat123 test_secrets -e "show databases;"
+oc new-app --name=quotes --docker-image quay.io/redhattraining/famous-quotes:1.0
+oc set env --from=secret/mysql --prefix QUOTES_ deployment.apps/quotes
+oc expose service/quotes
+oc get routes
+curl http://quotes-authorization-rbac.apps-crc.testing/env
+curl http://quotes-authorization-rbac.apps-crc.testing/status
+curl http://quotes-authorization-rbac.apps-crc.testing/random
+oc get all
 
+
+#Service account
+As developer :
+oc new-project authorization-scc
+oc new-app --name gitlab --docker-image gitlab/gitlab-ce:8.4.3-ce.0
+oc create serviceaccount gitlab-sa
+As admin user :
+oc adm policy add-scc-to-user anyuid -z gitlab-sa
+As developer :
+oc set serviceaccount deployment gitlab gitlab-sa
+oc expose service gitlab --port=80
+
+
+Securing route :
+oc new-project network-review
+oc new-app --docker-image quay.io/redhattraining/php-ssl:v1.0 --name php-http
+oc expose service service/php-http
+curl http://php-http-network-review.apps-crc.testing
+openssl req --help
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout test.key -out test.crt
+        php-https-network-review.apps-crc.testing
+oc create secret tls php-certs --cert="test.crt" --key="test.key"
+oc new-app --docker-image quay.io/redhattraining/php-ssl:v1.1 --name php-https -o yaml --dry-run=true > php-https.yaml
+#Remove port 8080 from below file php-https.yaml and add php-certs secret under deployment container
+vi php-https.yaml
+        volumes:
+        - name: tls-certs
+          secret:
+            secretName: php-certs
+
+oc create -f php-https.yaml
+oc set volume --secret-name=secret/php-certs --add --mount-path=/usr/local/etc/ssl/certs/ deployment.apps/php-https
+oc debug -t deployment.apps/php-http --image registry.access.redhat.com/ubi8/ubi:8.0
+oc create route edge php-https --service=service/php-https --key=test.key --cert=test.crt
+
+
+
+oc new-project network-review
+oc new-app --name=nginx --docker-image=nginx
+oc create serviceaccount serapp
+oc adm policy add-scc-to-user anyuid -z serapp
+oc set serviceaccount deployment nginx serapp
+oc expose service nginx
+curl nginx-network-review.apps-crc.testing
+curl https://nginx-network-review.apps-crc.testing
+curl -k https://nginx-network-review.apps-crc.testing
+oc delete route nginx
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 -keyout test.key -out test.crt
+oc create route edge --key=test.key --cert=test.crt --service=service/nginx --hostname=nginx-network-review.apps-crc.testing
+curl https://nginx-network-review.apps-crc.testing
+curl -k https://nginx-network-review.apps-crc.testing
+
+
+#Controlling pod scheduling
+oc new-project schedule-pods
+oc get nodes --show-labels
+oc get machines -n openshift-machine-api -o wide
+oc get machineset -n openshift-machine-api -o wide
+curl -v telnet://10.217.0.139:80
+oc label node crc-pkjt4-master-0 env=prod
+oc get nodes -L env -l node-role.kubernetes.io/worker
+oc get nodes -L env -l node-role.kubernetes.io/master
+oc create deployment hello-world --image=quay.io/redhattraining/hello-world-nginx:v1.0
+oc expose deployment.apps/hello-world --port=80 --target-port=8080
+oc expose service/hello-world
+curl hello-world-schedule-pods.apps-crc.testing
+# set label
+        
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          env: dev
+
+oc edit deployment.apps/helloworld
+oc label nodes crc-pkjt4-master-0 env=dev
+oc get all
+oc label --overwrite nodes crc-pkjt4-master-0 env-
+oc get all
+
+
+
+#quota and limits
+
+oc create deployment hello-world-nginx --image=quay.io/redhattraining/hello-world-nginx:v1.0
+oc set resources deployment hello-world-nginx --requests cpu=10m,memory=20Mi --limits cpu=80m,memory=100Mi
+oc create quota dev-quota --hard=cpu=1,memory=1.5Gi,services=10
+oc create clusterquota user-qa --project-annotation-selector openshift.io/requester=qa --hard pods=12,secrets=20
+
+spec:
+   containers:
+    - image: quay.io/redhattraining/hello-world-nginx:v1.0
+      name: hello-world-nginx
+      resources:
+        requests:
+                cpu: "10m"
+                memory: 20Mi
+        limits:
+                cpu: "80m"
+                memory: 100Mi
+
+
+oc new-project schedule-limit
+oc create deployment hello-limit --image quay.io/redhattraining/hello-world-nginx:v1.0 --dry-run=client -o yaml > hello-limit.yaml
+vi hello-limit.yaml
+
+      containers:
+      - image: quay.io/redhattraining/hello-world-nginx:v1.0
+        name: hello-world-nginx
+        resources: 
+          cpu: "3"
+          memory: "20Mi"
+
+oc create --save-config -f hello-limit.yaml
+oc get events --field-selector type=Warning
+vi hello-limit.yaml
+        cpu: "2"
+oc apply -f hello-limit.yaml
+oc scale --replicas 5 deployment.apps/hello-limit
+oc create quota project-quota --hard=cpu=3,memory="1G",replicationcontrollers="2" -n schedule-limit
+oc delete quota project-quota
+oc delete project schedule-limit
+
+
+#Horizontal Pod Autoscalar
+oc new-project hpa
+oc autoscale deployment.apps/cakephp-ex --min=2 --max=10 --cpu-percent 10
+
+
+#schedule-scale
+oc new-project schedule-scale
+oc new-app --name loadtest --docker-image=quay.io/redhattraining/loadtest:v1.0
+oc set resources deployment.apps/loadtest --limits=cpu=100m,memory=100Mi --requests=cpu=25m,memory=25Mi
+oc scale --replicas 5 deployment.apps/loadtest
+oc scale --replicas 1 deployment.apps/loadtest
+oc autoscale deployment.apps/loadtest --min=2 --max=10 --cpu-percent 50
+oc new-app --docker-image quay.io/redhattraining/scaling:v1.0
+oc expose service/scaling
+
+
+#Lab controlling pod scheduling
+oc new-project schedule-review
+oc get nodes
+oc label --overwrite nodes crc-pkjt4-master-0 env1=prod
+oc label --overwrite nodes crc-pkjt4-master-0 env2=test
+oc create deployment loadtest --image quay.io/redhattraining/loadtest:v1.0 -o yaml --dry-run=client > loadtest.yaml
+vi loadtest.yaml
+
+      containers:
+      - image: quay.io/redhattraining/loadtest:v1.0
+        name: loadtest
+        resources:
+          request:
+            cpu: 100m
+            memory: 20mi
+      nodeSelector:
+        env2: test
+
+oc expose deployment.apps/loadtest --port=80 --target-port=8080 
+oc expose service/loadtest
+curl http://loadtest-schedule-review.apps-crc.testing/api/loadtest/v1/healthz
+oc autoscale deployment.apps/loadtest --min=2 --max=40 --cpu-percent 70
+curl -X GET http://loadtest-schedule-review.apps-crc.testing/api/loadtest/v1/cpu/3
+oc get hpa/loadtest
+oc login -u admin -p redhat
+oc create quota review-quota --hard=cpu=1,memory=2G,pods=20
+
+
+
+
+
+
+oc new-app https://github.com/sclorg/cakephp-ex
