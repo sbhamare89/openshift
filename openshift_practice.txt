@@ -47,6 +47,8 @@ oc delete identity my_htpasswd_provider:user1
 oc adm groups new users user1
 oc adm groups add-users users user2 user3
 
+oc adm policy add-cluster-role-to-user cluster-admin admin
+oc delete secret kubeadmin -n kube-system
 
 #create new project
 oc new-project project1
@@ -200,6 +202,35 @@ oc create quota project-quota --hard=cpu=3,memory="1G",replicationcontrollers="2
 oc delete quota project-quota
 oc delete project schedule-limit
 
+                        [forlinuxdata@crc-vm lab]$ cat limit.yaml 
+                        apiVersion: "v1"
+                        kind: "LimitRange"
+                        metadata:
+                        name: "resource-limits"
+                        spec:
+                        limits:
+                        - type: "Container"
+                        max:
+                                cpu: "2"
+                                memory: "1Gi"
+                        min:
+                                cpu: "100m"
+                                memory: "4Mi"
+                        default:
+                                cpu: "300m"
+                                memory: "200Mi"
+                        defaultRequest:
+                                cpu: "200m"
+                                memory: "100Mi"
+                        maxLimitRequestRatio:
+                                cpu: "10"
+                        - type: "Pod"
+                        max:
+                                cpu: "2"
+                                memory: "1Gi"
+                        min:
+                                cpu: "100m"
+                                memory: "4Mi"
 
 #Horizontal Pod Autoscalar
 oc new-project hpa
