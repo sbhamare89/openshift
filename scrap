@@ -27,6 +27,9 @@ curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.9.0/crc-lin
 
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.10.0/crc-linux-amd64.tar.xz && tar -Jxvf crc-linux-amd64.tar.xz && mkdir -p ~/bin && export PATH=$PATH:~/bin && mv crc-linux*/crc ~/bin/ && rm -rf crc*
 
+CRC 4.5.1
+curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.13.0/crc-linux-amd64.tar.xz && tar -Jxvf crc-linux-amd64.tar.xz && mkdir -p ~/bin && export PATH=$PATH:~/bin && mv crc-linux*/crc ~/bin/ && rm -rf crc*
+
 crc 4.5.9
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/crc/1.16.0/crc-linux-amd64.tar.xz && tar -Jxvf crc-linux-amd64.tar.xz && mkdir -p ~/bin && export PATH=$PATH:~/bin && mv crc-linux*/crc ~/bin/ && rm -rf crc*
 
