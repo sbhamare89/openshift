@@ -1,0 +1,8 @@
+version: '3'
+services:
+    web:
+        container_name: golang_container
+        image: "sbhamare/golang:v1"
+        ports:
+        - "5555:8080"
+        restart: always
